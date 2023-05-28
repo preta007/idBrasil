@@ -1,79 +1,53 @@
 
 @extends('adminlte::page')
 @section('title', 'Dashboard')
-
+@section('plugins.Datatables', true)
 @section('content_header')
     <h1>Dashboard</h1>
 @stop
 
 @section('content')
-<div class="card card-danger">
-<div class="card-header">
-<h3 class="card-title">Input masks</h3>
-</div>
-<div class="card-body">
+{{-- Setup data for datatables --}}
+@php
+$heads = [
+    'ID',
+    'Name',
+    ['label' => 'Phone', 'width' => 40],
+    ['label' => 'Actions', 'no-export' => true, 'width' => 5],
+];
 
-<div class="form-group">
-<label>Date masks:</label>
-<div class="input-group">
-<div class="input-group-prepend">
-<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-</div>
-<input type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric">
-</div>
+$btnEdit = '<button class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit">
+                <i class="fa fa-lg fa-fw fa-pen"></i>
+            </button>';
+$btnDelete = '<button class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete">
+                  <i class="fa fa-lg fa-fw fa-trash"></i>
+              </button>';
+$btnDetails = '<button class="btn btn-xs btn-default text-teal mx-1 shadow" title="Details">
+                   <i class="fa fa-lg fa-fw fa-eye"></i>
+               </button>';
 
- </div>
+$config = [
+    'data' => [
+        [22, 'John Bender', '+02 (123) 123456789', '<nobr>'.$btnEdit.$btnDelete.$btnDetails.'</nobr>'],
+        [19, 'Sophia Clemens', '+99 (987) 987654321', '<nobr>'.$btnEdit.$btnDelete.$btnDetails.'</nobr>'],
+        [3, 'Peter Sousa', '+69 (555) 12367345243', '<nobr>'.$btnEdit.$btnDelete.$btnDetails.'</nobr>'],
+    ],
+    'order' => [[1, 'asc']],
+    'columns' => [null, null, null, ['orderable' => false]],
+];
+@endphp
 
+{{-- Minimal example / fill data using the component slot --}}
+<x-adminlte-datatable id="table1" :heads="$heads">
+    @foreach($config['data'] as $row)
+        <tr>
+            @foreach($row as $cell)
+                <td>{!! $cell !!}</td>
+            @endforeach
+        </tr>
+    @endforeach
+</x-adminlte-datatable>
 
-<div class="form-group">
-<div class="input-group">
-<div class="input-group-prepend">
-<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-</div>
-<input type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask="" inputmode="numeric">
-</div>
-
-</div>
-
-
-<div class="form-group">
-<label>US phone mask:</label>
-<div class="input-group">
-<div class="input-group-prepend">
-<span class="input-group-text"><i class="fas fa-phone"></i></span>
-</div>
-<input type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text">
-</div>
-
-</div>
-
-
-<div class="form-group">
-<label>Intl US phone mask:</label>
-<div class="input-group">
-<div class="input-group-prepend">
-<span class="input-group-text"><i class="fas fa-phone"></i></span>
-</div>
-<input type="text" class="form-control" data-inputmask="'mask': ['999-999-9999 [x99999]', '+099 99 99 9999[9]-9999']" data-mask="" inputmode="text">
-</div>
-
-</div>
-
-
-<div class="form-group">
-<label>IP mask:</label>
-<div class="input-group">
-<div class="input-group-prepend">
-<span class="input-group-text"><i class="fas fa-laptop"></i></span>
-</div>
-<input type="text" class="form-control" data-inputmask="'alias': 'ip'" data-mask="" inputmode="decimal">
-</div>
-
-</div>
-
-</div>
-
-</div>
 @stop
 
 

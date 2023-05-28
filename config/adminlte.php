@@ -299,7 +299,7 @@ return [
         // Sidebar items:
         [
             'text' => 'account',
-            'url'  => 'admin/settings',
+            'url'  => 'account',
             'icon' => 'fas fa-fw fa-user',
         ],
         

@@ -15,7 +15,7 @@ class CreateMovements extends Migration
     {
         Schema::create('movements', function (Blueprint $table) {
             $table->id();
-            $table->string('value');
+            $table->decimal('value', 10,2)->nullable();
             $table->string('description');
             $table->string('type');
             $table->unsignedBigInteger('id_account')->unsigned();
