@@ -19,13 +19,14 @@ class MovementController extends Controller
         $account = Account::find($id);
         $movement = Movement::where('id_account', $id)->get();
 
-        return view('movement', compact('account','movement'));
+        return view('movement.movement', compact('account','movement'));
       
     }
 
-    public function add()
+    public function add($id)
     {
-        return view('addAccount');
+        $account = Account::find($id);
+        return view('movement.addMovement', compact('account'));
     }
 
     public function create(Request $request)
@@ -37,20 +38,41 @@ class MovementController extends Controller
             'description' => ['required'],
         ]);
      
-        $account = Account::create([
-            'name'=> $request->get('name'),
-            'id_user'=> Auth::user()->id,
-        ]);
-
         $movement = Movement::create([
             'value'=> $request->get('value'),
             'description'=> $request->get('description'),
             'type'=> $request->get('type'),
-            'id_account'=> $account->id,
+            'id_account'=> $request->get('id_account'),
         ]);
 
-        return redirect()->route('account');       
+        return redirect()->route('movement', $request->get('id_account'));       
         
+    }
+
+    public function edit($id)
+    {
+        $movement = Movement::find($id);
+
+        return view('movement.editMovement', compact('movement'));
+
+    }
+
+    public function update(Request $request, $id)
+    {
+
+        $this->validate($request,[
+            'name' => ['required'],
+            'value' => ['required'],
+            'type' => ['required'],
+            'description' => ['required'],
+        ]);
+
+
+        $movement = Movement::find($id);
+        $movement->fill($request->all());
+        $movement->save();
+
+        return redirect()->route('movement', $request->get('id_account'));    
     }
 
     public function destroy($id)

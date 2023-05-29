@@ -1,7 +1,7 @@
 
 @extends('adminlte::page')
 @section('content_header')
-    <h1 class="float-left mb-5">Adicionar Conta</h1>
+    <h1 class="float-left mb-5">Adicionar Saldo</h1>
 @stop
 
 @section('content')
@@ -11,18 +11,19 @@
                     <!-- /.card-header -->
                     <div class="card-body">
 
-                        <form action="{{ route('create.account') }}" method="post">
+                        <form action="{{ route('create.movement') }}" method="post">
                             @csrf
+                            <input type="hidden" name="id_account"  value='{{ $account->id}}'>
                             <div class="form-group">
                                 <label>Nome</label>
-                                <input type="text" name="name" class="form-control {{ $errors->has('name') ? "is-invalid":"" }}"  required>
+                                <input type="text" name="name" class="form-control {{ $errors->has('name') ? "is-invalid":"" }}" value='{{ $account->name}}' readonly>
                                 @if($errors->has('name'))
                                     <span class="error invalid-feedback">{{ $errors->first('name') }}</span>
                                 @endif
                             </div>
                             <div class="form-group">
                                 <label>Valor</label>
-                                <input type="text" name="value"  class="form-control valor {{ $errors->has('value') ? "is-invalid":"" }}"   required>
+                                <input type="number" name="value"  class="form-control valor {{ $errors->has('value') ? "is-invalid":"" }}"   required>
                                 @if($errors->has('value'))
                                     <span class="error invalid-feedback">{{ $errors->first('value') }}</span>
                                 @endif
@@ -37,8 +38,11 @@
                             </div>
                             <div class="form-group">
                                 <label>Tipo</label>
-                                <input type="text" name="type"  class="form-control {{ $errors->has('type') ? "is-invalid":"" }}"  required>
-
+                                <select name ='type' class="form-control {{ $errors->has('type') ? "is-invalid":"" }}" required>
+                                    <option></option>
+                                    <option value='debito' >debito</option>
+                                    <option value='credito'>credito</option>
+                                </select>
                                 @if($errors->has('type'))
                                     <span class="error invalid-feedback">{{ $errors->first('type') }}</span>
                                 @endif

@@ -3,31 +3,40 @@
 @section('title', 'Dashboard')
 @section('plugins.Datatables', true)
 @section('content_header')
-    <a href="{{ route('add.account') }}" class="btn btn-primary float-right mb-5">Adicionar Conta<a>
-    <h1 class="float-left">Dashboard</h1>
+    <a href="{{ route('add.movement', $account->id) }}" class="btn btn-primary float-right mb-10">Adicionar Movimento<a>
 @stop
 
 @section('content')
+<br><br>
+<div class="callout callout-info">
+        <h5>Conta:</h5>
+        {{ $account->name }}
+    </div>
+
 {{-- Setup data for datatables --}}
 @php
 $heads = [
     'ID',
-    'Nome',
+    'Tipo',
     'Saldo',
+    'Descrição',
+    'Data',
     ['label' => 'Ações', 'no-export' => true, 'width' => 5],
 ];
 @endphp
 <x-adminlte-datatable id="table1" :heads="$heads">
-    @foreach($account as $row)
+    @foreach($movement as $row)
         <tr>
             <td>{{ $row->id }}</td>
-            <td>{{ $row->name }}</td>
-            <td>{{ $row->value}}</td>
+            <td>{{ $row->type}}</td>
+            <td>{{ number_format( $row->value, 2, '.', '') }} </td>
+            <td>{{ $row->description }}</td>
+            <td>{{ $row->created_at }}</td>
             <td>
-                <form action="{{ route('destroy.account', $row->id) }}" method="post">
+                <form action="{{ route('destroy.movement', $row->id) }}" method="post">
                     @csrf
                     <div class="btn-group">
-                        <a href="{{ route('movement', $row->id) }}" type="button" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                        <a href="{{ route('edit.movement', $row->id) }}" type="button" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
                         <input name="_method" type="hidden" value="DELETE">
                         <button type="button" class="btn btn-danger btn-sm" onclick="if (confirm('Tem certeza?')) { this.form.submit() } "> <i class="fa fa-trash"></i></button>
                     </div>
